@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鈴木雅明 ― 紫紺塾 2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple: #3d2e6b;
+    --purple-light: #4a3880;
+    --navy: #0f0d2e;
+    --navy-mid: #1a1545;
+    --gold: #d4b878;
+    --gold-light: #e8d5a3;
+    --gold-dim: rgba(212, 184, 120, 0.3);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+  body { font-family: 'Shippori Mincho', serif; background: var(--navy); color: #fff; overflow-x: hidden; }
+  .front {
+    min-height: 100vh; min-height: 100dvh;
+    background: var(--purple);
+    background-image: radial-gradient(ellipse at 15% 85%, rgba(120, 90, 180, 0.25) 0%, transparent 50%), radial-gradient(ellipse at 85% 15%, rgba(90, 70, 150, 0.2) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(80, 60, 140, 0.1) 0%, transparent 70%);
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    padding: 0 12vw; position: relative; scroll-snap-align: start;
+  }
+  .front::after { content: ''; position: absolute; bottom: 0; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, transparent); }
+  .gold-line { width: 40px; height: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); margin-bottom: 28px; opacity: 0; animation: fadeSlideUp 0.8s ease 0.3s forwards; }
+  .front-title { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(11px, 1.4vw, 14px); font-weight: 300; letter-spacing: 6px; color: rgba(255,255,255,0.5); margin-bottom: 28px; opacity: 0; animation: fadeSlideUp 0.8s ease 0.5s forwards; }
+  .front-name { font-size: clamp(36px, 6vw, 64px); font-weight: 500; letter-spacing: 12px; color: #fff; margin-bottom: 8px; opacity: 0; animation: fadeSlideUp 0.8s ease 0.7s forwards; }
+  .front-name-en { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(10px, 1.2vw, 13px); font-weight: 200; letter-spacing: 5px; color: rgba(255,255,255,0.3); margin-bottom: 48px; opacity: 0; animation: fadeSlideUp 0.8s ease 0.9s forwards; }
+  .contact-list { display: flex; flex-direction: column; gap: 12px; opacity: 0; animation: fadeSlideUp 0.8s ease 1.1s forwards; }
+  .contact-item { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(11px, 1.3vw, 14px); font-weight: 300; color: rgba(255,255,255,0.6); letter-spacing: 1.5px; display: flex; align-items: center; gap: 12px; }
+  .contact-item .icon { color: var(--gold); width: 18px; text-align: center; font-size: 13px; }
+  .contact-item a { color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.3s; }
+  .contact-item a:hover { color: var(--gold-light); }
+  .yorifuro { font-size: 9px; color: rgba(255,255,255,0.25); margin-left: 6px; letter-spacing: 1px; }
+  .scroll-hint { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; animation: fadeIn 1s ease 2s forwards; }
+  .scroll-hint span { font-family: 'Noto Sans JP', sans-serif; font-size: 9px; letter-spacing: 3px; color: rgba(255,255,255,0.2); }
+  .scroll-arrow { width: 1px; height: 24px; background: linear-gradient(to bottom, var(--gold-dim), transparent); animation: scrollPulse 2s ease infinite; }
+  .back {
+    min-height: 100vh; min-height: 100dvh;
+    background: var(--navy);
+    background-image: radial-gradient(ellipse at 75% 75%, rgba(30, 25, 70, 0.5) 0%, transparent 50%), radial-gradient(ellipse at 25% 25%, rgba(20, 18, 55, 0.4) 0%, transparent 50%);
+    position: relative; scroll-snap-align: start; display: flex; padding: 0;
+  }
+  .back::before { content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, transparent); }
+  .back-left { width: 38%; display: flex; align-items: center; justify-content: center; padding: 48px; position: relative; }
+  .illustration-wrapper { position: relative; max-width: 280px; width: 100%; }
+  .illustration-wrapper img { width: 100%; border-radius: 4px; opacity: 0; animation: fadeIn 1s ease forwards; animation-play-state: paused; }
+  .illustration-wrapper.visible img { animation-play-state: running; }
+  .illustration-border { position: absolute; inset: -6px; border: 1px solid var(--gold-dim); border-radius: 4px; transform: translate(6px, 6px); pointer-events: none; }
+  .back-right { width: 62%; display: flex; flex-direction: column; justify-content: center; padding: 48px 8vw 48px 24px; }
+  .juku-name { font-size: clamp(20px, 2.8vw, 28px); font-weight: 600; letter-spacing: 5px; color: var(--gold); margin-bottom: 4px; opacity: 0; transform: translateY(20px); transition: all 0.8s ease; }
+  .juku-name.visible { opacity: 1; transform: translateY(0); }
+  .slogan { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(10px, 1.1vw, 12px); font-weight: 300; color: rgba(255,255,255,0.35); letter-spacing: 3px; margin-bottom: 20px; opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.1s; }
+  .slogan.visible { opacity: 1; transform: translateY(0); }
+  .back-gold-line { width: 28px; height: 1px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); margin-bottom: 20px; opacity: 0; transition: opacity 0.8s ease 0.2s; }
+  .back-gold-line.visible { opacity: 1; }
+  .bio { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(11px, 1.2vw, 13px); font-weight: 300; color: rgba(255,255,255,0.5); line-height: 2; letter-spacing: 1px; margin-bottom: 24px; opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.3s; }
+  .bio.visible { opacity: 1; transform: translateY(0); }
+  .section-title { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(9px, 1vw, 11px); font-weight: 500; color: var(--gold); letter-spacing: 3px; margin-bottom: 8px; }
+  .section-content { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(11px, 1.2vw, 13px); font-weight: 300; color: rgba(255,255,255,0.55); line-height: 1.9; margin-bottom: 20px; }
+  .recommend-item { display: flex; align-items: baseline; gap: 6px; font-family: 'Noto Sans JP', sans-serif; font-size: clamp(10px, 1.1vw, 12px); font-weight: 300; color: rgba(255,255,255,0.45); line-height: 2; }
+  .recommend-item .dash { color: rgba(255,255,255,0.2); }
+  .free-consult { font-size: clamp(14px, 1.6vw, 18px); font-weight: 500; color: var(--gold); letter-spacing: 4px; margin-top: 16px; margin-bottom: 28px; }
+  .details-block { opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.4s; }
+  .details-block.visible { opacity: 1; transform: translateY(0); }
+  .announcement { margin-top: 8px; padding-top: 20px; border-top: 1px solid rgba(212, 184, 120, 0.15); opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.6s; }
+  .announcement.visible { opacity: 1; transform: translateY(0); }
+  .announcement-label { font-family: 'Noto Sans JP', sans-serif; font-size: 9px; font-weight: 500; color: var(--gold); letter-spacing: 4px; margin-bottom: 10px; text-transform: uppercase; }
+  .announcement-content { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(12px, 1.3vw, 14px); font-weight: 300; color: rgba(255,255,255,0.6); line-height: 1.9; letter-spacing: 0.5px; }
+  .announcement-content strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+  .back-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 32px; opacity: 0; transition: opacity 0.8s ease 0.7s; }
+  .back-footer.visible { opacity: 1; }
+  .hobby { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(9px, 1vw, 11px); font-weight: 300; color: rgba(255,255,255,0.2); letter-spacing: 1px; }
+  .penname { font-size: clamp(11px, 1.2vw, 13px); font-weight: 400; color: rgba(255,255,255,0.25); letter-spacing: 3px; }
+  @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 0.95; } }
+  @keyframes scrollPulse { 0%, 100% { opacity: 0.3; transform: scaleY(1); } 50% { opacity: 0.6; transform: scaleY(1.3); } }
+  .spotify-wrapper { position: fixed; bottom: 24px; right: 24px; z-index: 100; opacity: 0; animation: fadeIn 1s ease 2.5s forwards; transition: transform 0.3s ease; }
+  .spotify-wrapper:hover { transform: translateY(-2px); }
+  .spotify-toggle { width: 44px; height: 44px; border-radius: 50%; background: rgba(212, 184, 120, 0.1); border: 1px solid var(--gold-dim); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s; color: var(--gold); font-size: 16px; }
+  .spotify-toggle:hover { background: rgba(212, 184, 120, 0.2); border-color: var(--gold); }
+  .spotify-toggle.active { background: rgba(212, 184, 120, 0.25); border-color: var(--gold); }
+  .spotify-player { position: absolute; bottom: 54px; right: 0; width: 300px; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.4); transform: translateY(10px) scale(0.95); opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+  .spotify-player.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+  .spotify-label { position: absolute; bottom: 54px; right: 52px; font-family: 'Noto Sans JP', sans-serif; font-size: 9px; color: rgba(255,255,255,0.2); letter-spacing: 2px; white-space: nowrap; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+  .spotify-wrapper:hover .spotify-label { opacity: 1; }
+  @media (max-width: 768px) {
+    .front { padding: 0 8vw; }
+    .back { flex-direction: column; }
+    .back-left { width: 100%; padding: 48px 24px 24px; }
+    .illustration-wrapper { max-width: 200px; }
+    .back-right { width: 100%; padding: 24px 8vw 48px; }
+    .back-footer { flex-direction: column; gap: 8px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<section class="front">
+  <div class="gold-line"></div>
+  <div class="front-title">伊豆高原 ／ 家庭教師</div>
+  <div class="front-name">鈴木雅明</div>
+  <div class="front-name-en">MASAAKI SUZUKI</div>
+  <div class="contact-list">
+    <div class="contact-item"><span class="icon">✉</span><a href="mailto:shikonjuku_02@icloud.com">shikonjuku_02@icloud.com</a></div>
+    <div class="contact-item"><span class="icon">☎</span><a href="tel:07022254126">070-2225-4126</a><span class="yorifuro">（ヨイフロ）</span></div>
+    <div class="contact-item"><span class="icon" style="font-weight:700; font-size:14px;">L</span>shikon2.0</div>
+  </div>
+  <div class="scroll-hint"><span>SCROLL</span><div class="scroll-arrow"></div></div>
+</section>
+<section class="back" id="back">
+  <div class="back-left">
+    <div class="illustration-wrapper" id="illustration">
+      <img src="IMG_9540.jpeg" alt="能面＋柔術着">
+      <div class="illustration-border"></div>
+    </div>
+  </div>
+  <div class="back-right">
+    <div class="juku-name" id="jukuName">紫紺塾 2.0</div>
+    <div class="slogan" id="slogan">日本のみらいは私たちが創る</div>
+    <div class="back-gold-line" id="backGoldLine"></div>
+    <div class="bio" id="bio">1965年 東京中野生まれ<br>京セラ、カールツァイスで人事経験<br>紫紺塾 6年間運営</div>
+    <div class="details-block" id="details">
+      <div class="section-title">対 応 科 目</div>
+      <div class="section-content">英語・数学（中学生・高校生）<br>難関中学受験（算数）</div>
+      <div class="section-title">こんな方におすすめ</div>
+      <div class="recommend-item"><span class="dash">―</span> 自分のペースで学びたい方</div>
+      <div class="recommend-item"><span class="dash">―</span> 不登校生徒</div>
+      <div class="recommend-item"><span class="dash">―</span> 将来を見据えた学習相談</div>
+      <div class="free-consult">初回相談　無料</div>
+    </div>
+    <div class="announcement" id="announcement">
+      <div class="announcement-label">お知らせ</div>
+      <div class="announcement-content"><strong>『奥さま写真館』</strong><br>電子書籍、今春発売予定。<br>詳細は追ってお知らせします。</div>
+    </div>
+    <div class="back-footer" id="footer">
+      <div class="hobby">趣味：小説執筆、ブラジリアン柔術</div>
+      <div class="penname">仕掛け人 たちばな蒼</div>
+    </div>
+  </div>
+</section>
+<div class="spotify-wrapper" id="spotifyWrapper">
+  <span class="spotify-label">THEME SONG</span>
+  <div class="spotify-player" id="spotifyPlayer">
+    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/3OFdR2FSyU8e09vzwnwn8D?utm_source=generator&theme=0" width="300" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  </div>
+  <div class="spotify-toggle" id="spotifyToggle" title="Theme Song"><span>♪</span></div>
+</div>
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        ['illustration','jukuName','slogan','backGoldLine','bio','details','announcement','footer'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('visible');
+        });
+      }
+    });
+  }, { threshold: 0.15 });
+  observer.observe(document.getElementById('back'));
+  const toggle = document.getElementById('spotifyToggle');
+  const player = document.getElementById('spotifyPlayer');
+  let isOpen = false;
+  toggle.addEventListener('click', () => { isOpen = !isOpen; player.classList.toggle('open', isOpen); toggle.classList.toggle('active', isOpen); });
+  document.addEventListener('click', (e) => { if (isOpen && !document.getElementById('spotifyWrapper').contains(e.target)) { isOpen = false; player.classList.remove('open'); toggle.classList.remove('active'); } });
+</script>
+</body>
+</html>
