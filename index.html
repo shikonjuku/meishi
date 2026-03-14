@@ -37,6 +37,10 @@
   .contact-item a { color: rgba(255,255,255,0.8); text-decoration: none; transition: color 0.3s; }
   .contact-item a:hover { color: var(--gold-light); }
   .yorifuro { font-size: 9px; color: rgba(255,255,255,0.4); margin-left: 6px; letter-spacing: 1px; }
+  .social-row { display: flex; gap: 20px; margin-top: 8px; opacity: 0; animation: fadeSlideUp 0.8s ease 1.3s forwards; }
+  .social-link { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(11px, 1.2vw, 13px); font-weight: 400; color: rgba(255,255,255,0.6); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color 0.3s; letter-spacing: 1px; }
+  .social-link:hover { color: var(--gold-light); }
+  .social-link .social-icon { font-size: 14px; color: var(--gold); }
   .scroll-hint { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; animation: fadeIn 1s ease 2s forwards; }
   .scroll-hint span { font-family: 'Noto Sans JP', sans-serif; font-size: 9px; letter-spacing: 3px; color: rgba(255,255,255,0.3); }
   .scroll-arrow { width: 1px; height: 24px; background: linear-gradient(to bottom, var(--gold-dim), transparent); animation: scrollPulse 2s ease infinite; }
@@ -47,14 +51,21 @@
     position: relative; scroll-snap-align: start; display: flex; padding: 0;
   }
   .back::before { content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold-light) 50%, var(--gold) 70%, transparent); }
-  .back-left { width: 38%; display: flex; align-items: center; justify-content: center; padding: 48px; position: relative; }
+  .back-left { width: 38%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px; position: relative; }
   .illustration-wrapper { position: relative; max-width: 280px; width: 100%; }
   .illustration-wrapper img { width: 100%; border-radius: 4px; opacity: 0; animation: fadeIn 1s ease forwards; animation-play-state: paused; }
   .illustration-wrapper.visible img { animation-play-state: running; }
-  .illustration-border { position: absolute; inset: -6px; border: 1px solid var(--gold-dim); border-radius: 4px; transform: translate(6px, 6px); pointer-events: none; }
+  .photo-caption { text-align: center; margin-top: 16px; opacity: 0; transition: opacity 0.8s ease 0.5s; }
+  .photo-caption.visible { opacity: 1; }
+  .photo-caption-title { font-family: 'Shippori Mincho', serif; font-size: clamp(12px, 1.3vw, 14px); font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: 3px; margin-bottom: 8px; }
+  .photo-caption-ig { display: inline-flex; align-items: center; gap: 5px; font-family: 'Noto Sans JP', sans-serif; font-size: clamp(10px, 1vw, 12px); font-weight: 300; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s; letter-spacing: 1px; }
+  .photo-caption-ig:hover { color: var(--gold-light); }
+  .photo-caption-ig svg { width: 14px; height: 14px; fill: var(--gold); opacity: 0.7; }
   .back-right { width: 62%; display: flex; flex-direction: column; justify-content: center; padding: 48px 8vw 48px 24px; }
-  .juku-name { font-size: clamp(20px, 2.8vw, 28px); font-weight: 600; letter-spacing: 5px; color: var(--gold); margin-bottom: 4px; opacity: 0; transform: translateY(20px); transition: all 0.8s ease; }
+  .juku-name { font-size: clamp(20px, 2.8vw, 28px); font-weight: 600; letter-spacing: 5px; color: var(--gold); margin-bottom: 0; opacity: 0; transform: translateY(20px); transition: all 0.8s ease; }
   .juku-name.visible { opacity: 1; transform: translateY(0); }
+  .enjoy-studying { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(11px, 1.3vw, 14px); font-weight: 300; letter-spacing: 5px; color: var(--gold); opacity: 0.7; margin-bottom: 4px; opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.05s; }
+  .enjoy-studying.visible { opacity: 0.7; transform: translateY(0); }
   .slogan { font-family: 'Noto Sans JP', sans-serif; font-size: clamp(10px, 1.1vw, 12px); font-weight: 300; color: rgba(255,255,255,0.55); letter-spacing: 3px; margin-bottom: 20px; opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.1s; }
   .slogan.visible { opacity: 1; transform: translateY(0); }
   .back-gold-line { width: 28px; height: 1px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); margin-bottom: 20px; opacity: 0; transition: opacity 0.8s ease 0.2s; }
@@ -94,6 +105,7 @@
     .back-left { width: 100%; padding: 48px 24px 24px; }
     .illustration-wrapper { max-width: 200px; }
     .back-right { width: 100%; padding: 24px 8vw 48px; }
+    .social-row { gap: 16px; }
   }
 </style>
 </head>
@@ -108,18 +120,29 @@
     <div class="contact-item"><span class="icon">☎</span><a href="tel:07022254126">070-2225-4126</a><span class="yorifuro">（ヨイフロ）</span></div>
     <div class="contact-item"><span class="icon" style="font-weight:700; font-size:14px;">L</span>shikon2.0</div>
   </div>
+  <div class="social-row">
+    <a href="https://www.facebook.com/SoLifeStory" target="_blank" class="social-link"><span class="social-icon">f</span>Facebook</a>
+    <a href="https://x.com/So_LifeStory" target="_blank" class="social-link"><span class="social-icon">𝕏</span>X</a>
+  </div>
   <div class="scroll-hint"><span>SCROLL</span><div class="scroll-arrow"></div></div>
 </section>
 <section class="back" id="back">
   <div class="back-left">
     <div class="illustration-wrapper" id="illustration">
-      <img src="IMG_9540.jpg" alt="能面＋柔術着">
-      <div class="illustration-border"></div>
+      <img src="image0.jpeg" alt="プロフィール">
+    </div>
+    <div class="photo-caption" id="photoCaption">
+      <div class="photo-caption-title">おじさま写真館</div>
+      <a href="https://www.instagram.com/snap_0ji30/" target="_blank" class="photo-caption-ig">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        @snap_0ji30
+      </a>
     </div>
   </div>
   <div class="back-right">
     <div class="juku-name" id="jukuName">紫紺塾 2.0</div>
-    <div class="slogan" id="slogan">日本のみらいは私たちが創る</div>
+    <div class="enjoy-studying" id="enjoyStudying">Enjoy Studying</div>
+    <div class="slogan" id="slogan">日本そして静岡のみらいはわたしたちが創る</div>
     <div class="back-gold-line" id="backGoldLine"></div>
     <div class="bio" id="bio">1965年 東京中野生まれ<br>京セラ、カールツァイスで人事経験<br>紫紺塾 6年間運営</div>
     <div class="details-block" id="details">
@@ -133,7 +156,7 @@
     </div>
     <div class="announcement" id="announcement">
       <div class="announcement-label">お知らせ</div>
-      <div class="announcement-content"><strong>伊豆高原地区　家庭教師承ります</strong><br>お気軽にご相談ください。</div>
+      <div class="announcement-content"><strong>伊豆高原・静岡市内　家庭教師承ります</strong><br>お気軽にご相談ください。</div>
     </div>
     <div class="back-footer" id="footer">
       <div class="hobby">趣味：小説執筆、ブラジリアン柔術</div>
@@ -141,17 +164,17 @@
   </div>
 </section>
 <div class="spotify-wrapper" id="spotifyWrapper">
-  <span class="spotify-label">THEME SONG</span>
+  <span class="spotify-label">きみたちの物語が始まるよ</span>
   <div class="spotify-player" id="spotifyPlayer">
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/3OFdR2FSyU8e09vzwnwn8D?utm_source=generator&theme=0" width="300" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7kXmJwrZGIhDaLT9sNo3ut?utm_source=generator&theme=0" width="300" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
   </div>
-  <div class="spotify-toggle" id="spotifyToggle" title="Theme Song"><span>♪</span></div>
+  <div class="spotify-toggle" id="spotifyToggle" title="きみたちの物語が始まるよ"><span>♪</span></div>
 </div>
 <script>
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        ['illustration','jukuName','slogan','backGoldLine','bio','details','announcement','footer'].forEach(id => {
+        ['illustration','jukuName','enjoyStudying','slogan','backGoldLine','bio','details','announcement','footer','photoCaption'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.classList.add('visible');
         });
